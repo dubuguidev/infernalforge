@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Flame, Lock, ScrollText, UserRound } from 'lucide-react'
+import { Eye, EyeOff, Flame, Lock, ScrollText, UserRound } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Modal from '@/components/Modal'
 import Spinner from '@/components/Spinner'
@@ -21,11 +21,29 @@ export default function LoginPage() {
 
   const [identifier, setIdentifier] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
+  const [showLoginPassword, setShowLoginPassword] = useState(false)
 
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [registerPassword, setRegisterPassword] = useState('')
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false)
   const [lgpdAccepted, setLgpdAccepted] = useState(false)
+
+  const getErrorMessage = (error: unknown, fallback: string) => {
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'response' in error &&
+      typeof (error as { response?: unknown }).response === 'object' &&
+      (error as { response?: { data?: unknown } }).response?.data &&
+      typeof (error as { response?: { data?: unknown } }).response?.data === 'object'
+    ) {
+      const data = (error as { response?: { data?: { message?: unknown } } }).response?.data
+      if (typeof data?.message === 'string') return data.message
+      if (Array.isArray(data?.message) && typeof data.message[0] === 'string') return data.message[0]
+    }
+    return fallback
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -46,8 +64,8 @@ export default function LoginPage() {
       await login({ identifier, password: loginPassword })
       toast.success('Bem-vindo de volta à Forja Infernal.')
       router.replace('/')
-    } catch {
-      toast.error('Login inválido. Verifique usuário/e-mail e senha.')
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Login inválido. Verifique usuário/e-mail e senha.'))
     } finally {
       setIsSubmitting(false)
     }
@@ -71,8 +89,8 @@ export default function LoginPage() {
       })
       toast.success('Conta criada com sucesso.')
       router.replace('/')
-    } catch {
-      toast.error('Não foi possível criar a conta. Verifique os dados informados.')
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Não foi possível criar a conta. Verifique os dados informados.'))
     } finally {
       setIsSubmitting(false)
     }
@@ -128,15 +146,25 @@ export default function LoginPage() {
               </div>
               <div>
                 <label className="rpg-label">Senha</label>
-                <input
-                  type="password"
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                  className="rpg-input"
-                  placeholder="Digite sua senha"
-                  required
-                  minLength={6}
-                />
+                <div className="relative">
+                  <input
+                    type={showLoginPassword ? 'text' : 'password'}
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    className="rpg-input pr-10"
+                    placeholder="Digite sua senha"
+                    required
+                    minLength={6}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowLoginPassword((prev) => !prev)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-200 transition-colors"
+                    aria-label={showLoginPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                  >
+                    {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
               <button className="rpg-btn-primary w-full py-3" disabled={isSubmitting}>
                 <Lock className="w-4 h-4" />
@@ -170,15 +198,25 @@ export default function LoginPage() {
 
               <div>
                 <label className="rpg-label">Senha</label>
-                <input
-                  type="password"
-                  value={registerPassword}
-                  onChange={(e) => setRegisterPassword(e.target.value)}
-                  className="rpg-input"
-                  placeholder="No mínimo 6 caracteres"
-                  minLength={6}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showRegisterPassword ? 'text' : 'password'}
+                    value={registerPassword}
+                    onChange={(e) => setRegisterPassword(e.target.value)}
+                    className="rpg-input pr-10"
+                    placeholder="No mínimo 6 caracteres"
+                    minLength={6}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowRegisterPassword((prev) => !prev)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-200 transition-colors"
+                    aria-label={showRegisterPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                  >
+                    {showRegisterPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
 
               <button
@@ -230,7 +268,7 @@ export default function LoginPage() {
         maxWidth="max-w-3xl"
       >
         <div className="space-y-4 text-stone-300 leading-relaxed">
-          <p className="text-xs text-stone-500">Última atualização: 09 de Outubro de 2025</p>
+          <p className="text-xs text-stone-500">Última atualização: 03 de Abril de 2026</p>
 
           <p>
             Bem-vindo a Infernal Forge - Ímpio! Ao criar uma conta, você concorda com a coleta e
@@ -240,13 +278,13 @@ export default function LoginPage() {
 
           <p>
             <strong>1. Dados Coletados:</strong> Coletamos apenas os dados essenciais para o
-            funcionamento da plataforma, como informações de login e os jogos que você adiciona à
+            funcionamento da plataforma, como informações de login e os personagens que você adiciona à
             sua biblioteca.
           </p>
 
           <p>
             <strong>2. Uso dos Dados:</strong> Seus dados são usados exclusivamente para
-            personalizar sua experiência no EndGame e não são compartilhados com terceiros.
+            personalizar sua experiência na plataforma e não são compartilhados com terceiros.
           </p>
 
           <div className="pt-3 flex justify-end">

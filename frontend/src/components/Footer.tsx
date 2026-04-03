@@ -1,19 +1,23 @@
 import { Github, Linkedin } from 'lucide-react'
 
-const GITHUB_URL = 'https://github.com/seu-usuario'
-const LINKEDIN_URL = 'https://www.linkedin.com/in/seu-usuario/'
+const GITHUB_URL = 'https://github.com/dubuguidev'
+const LINKEDIN_URL = 'https://www.linkedin.com/in/gabrielbcostadev'
 
 export default function Footer() {
   return (
     <footer className="border-t border-red-950/40 bg-infernal-black/70">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="text-xs text-stone-500 text-center sm:text-left">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 grid grid-cols-1 sm:grid-cols-3 items-center gap-3">
+        <p className="text-xs text-stone-500 text-center sm:justify-self-start">
           © 2026 Infernal Forge - Ímpio . Todos os direitos reservados.
         </p>
 
-        <div className="flex items-center gap-2">
+        <p className="text-xs text-stone-500 text-center sm:justify-self-center">
+          Lasciate ogne speranza, voi ch'intrate
+        </p>
+
+        <div className="flex items-center justify-center sm:justify-self-end gap-2">
           <a
-            href={"https://github.com/dubuguidev"}
+            href={GITHUB_URL}
             target="_blank"
             rel="noreferrer"
             className="rpg-btn-ghost text-xs py-1.5 px-3"
@@ -23,7 +27,7 @@ export default function Footer() {
             GitHub
           </a>
           <a
-            href={"www.linkedin.com/in/gabrielbcostadev"}
+            href={LINKEDIN_URL}
             target="_blank"
             rel="noreferrer"
             className="rpg-btn-ghost text-xs py-1.5 px-3"
