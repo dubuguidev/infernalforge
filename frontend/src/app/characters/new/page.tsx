@@ -1,16 +1,36 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Flame } from 'lucide-react'
 import Link from 'next/link'
 import CharacterForm from '@/components/CharacterForm'
+import Spinner from '@/components/Spinner'
 import { useCreateCharacter } from '@/hooks/useCharacters'
+import { useAuth } from '@/hooks/useAuth'
 import type { CharacterPayload } from '@/types/character'
 import toast from 'react-hot-toast'
 
 export default function NewCharacterPage() {
   const router = useRouter()
+  const { isReady, isAuthenticated } = useAuth()
   const createMutation = useCreateCharacter()
+
+  useEffect(() => {
+    if (isReady && !isAuthenticated) {
+      router.replace('/login')
+    }
+  }, [isReady, isAuthenticated, router])
+
+  if (!isReady) {
+    return (
+      <div className="flex justify-center py-36">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) return null
 
   const handleSubmit = async (payload: CharacterPayload) => {
     try {

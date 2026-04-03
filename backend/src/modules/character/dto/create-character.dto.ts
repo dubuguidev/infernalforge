@@ -40,6 +40,10 @@ export class CreateCharacterDto {
   @IsNotEmpty()
   name: string;
 
+  @IsOptional()
+  @IsString()
+  lore?: string;
+
   @IsString()
   @IsNotEmpty()
   class: string;

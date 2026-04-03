@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Cinzel, Crimson_Text } from 'next/font/google'
 import Providers from '@/components/Providers'
 import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 import './globals.css'
 
 const cinzel = Cinzel({
@@ -33,10 +34,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR" className={`${cinzel.variable} ${crimson.variable}`}>
       <body>
         <Providers>
-          <Navbar />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 page-enter">
-            {children}
-          </main>
+          <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 page-enter flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

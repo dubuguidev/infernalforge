@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Pencil, Trash2, Flame, Swords, Shield, Brain, Heart } from 'lucide-react'
@@ -10,6 +10,7 @@ import Spinner from '@/components/Spinner'
 import AbilityBadge from '@/components/AbilityBadge'
 import StatBar from '@/components/StatBar'
 import { useCharacter, useDeleteCharacter } from '@/hooks/useCharacters'
+import { useAuth } from '@/hooks/useAuth'
 import toast from 'react-hot-toast'
 
 const STATS = [
@@ -22,9 +23,26 @@ const STATS = [
 export default function CharacterDetailPage() {
   const { id } = useParams<{ id: string }>()
   const router = useRouter()
+  const { isReady, isAuthenticated } = useAuth()
   const { data: character, isLoading, isError } = useCharacter(id)
   const deleteMutation = useDeleteCharacter()
   const [confirmOpen, setConfirmOpen] = useState(false)
+
+  useEffect(() => {
+    if (isReady && !isAuthenticated) {
+      router.replace('/login')
+    }
+  }, [isReady, isAuthenticated, router])
+
+  if (!isReady) {
+    return (
+      <div className="flex justify-center py-36">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) return null
 
   const handleDelete = async () => {
     if (!character) return
@@ -116,6 +134,7 @@ export default function CharacterDetailPage() {
           <CharacterCardPreview
             data={{
               name:         character.name,
+              lore:         character.lore ?? undefined,
               class:        character.class,
               race:         character.race,
               strength:     character.strength,
@@ -171,6 +190,13 @@ export default function CharacterDetailPage() {
                   <AbilityBadge key={ab.id} name={ab.name} />
                 ))}
               </div>
+            </div>
+          )}
+
+          {character.lore && (
+            <div className="rpg-card p-6">
+              <p className="rpg-section-title">Lore</p>
+              <p className="text-stone-300 whitespace-pre-line leading-relaxed">{character.lore}</p>
             </div>
           )}
 

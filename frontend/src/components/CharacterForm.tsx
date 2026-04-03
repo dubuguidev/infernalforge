@@ -14,6 +14,7 @@ import type { Character } from '@/types/character'
 /* ─── Schema ─── */
 const schema = z.object({
   name:         z.string().min(1, 'Nome é obrigatório').max(60),
+  lore:         z.string().max(600).optional(),
   class:        z.string().min(1, 'Classe é obrigatória').max(40),
   race:         z.string().min(1, 'Raça é obrigatória').max(40),
   strength:     z.coerce.number().int().min(0).max(100),
@@ -62,6 +63,7 @@ export default function CharacterForm({
     resolver: zodResolver(schema),
     defaultValues: {
       name:         defaultValues?.name ?? '',
+      lore:         defaultValues?.lore ?? '',
       class:        defaultValues?.class ?? '',
       race:         defaultValues?.race ?? '',
       strength:     defaultValues?.strength ?? 10,
@@ -99,6 +101,7 @@ export default function CharacterForm({
   const submit = async (values: FormValues) => {
     const payload: CharacterPayload = {
       name:         values.name,
+      lore:         values.lore?.trim() ? values.lore.trim() : undefined,
       class:        values.class,
       race:         values.race,
       strength:     values.strength,
@@ -169,6 +172,19 @@ export default function CharacterForm({
                   <p className="mt-1 text-red-500 text-xs">{errors.race.message}</p>
                 )}
               </div>
+            </div>
+
+            <div>
+              <label className="rpg-label">Lore (história curta)</label>
+              <textarea
+                {...register('lore')}
+                className="rpg-input min-h-28 resize-y"
+                placeholder="Ex: Sobreviveu ao cerco de Nhalgor e jurou caçar os hereges do Vale Cinzento..."
+                maxLength={600}
+              />
+              <p className="mt-1 text-xs text-stone-600">
+                {String(watched.lore?.length ?? 0)}/600 caracteres
+              </p>
             </div>
           </div>
         </section>
@@ -351,6 +367,7 @@ export default function CharacterForm({
           <CharacterCardPreview
             data={{
               name:         watched.name,
+              lore:         watched.lore,
               class:        watched.class,
               race:         watched.race,
               strength:     Number(watched.strength ?? 0),

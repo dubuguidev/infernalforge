@@ -1,13 +1,10 @@
-import axios from 'axios'
 import type { Character, CharacterPayload } from '@/types/character'
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
-
-const client = axios.create({ baseURL: API_URL })
+import { apiClient } from './api'
 
 function buildFormData(payload: CharacterPayload): FormData {
   const form = new FormData()
   form.append('name', payload.name)
+  form.append('lore', payload.lore ?? '')
   form.append('class', payload.class)
   form.append('race', payload.race)
   form.append('strength', String(payload.strength))
@@ -20,17 +17,17 @@ function buildFormData(payload: CharacterPayload): FormData {
 }
 
 export async function getCharacters(): Promise<Character[]> {
-  const { data } = await client.get<Character[]>('/character')
+  const { data } = await apiClient.get<Character[]>('/character')
   return data
 }
 
 export async function getCharacter(id: string): Promise<Character> {
-  const { data } = await client.get<Character>(`/character/${id}`)
+  const { data } = await apiClient.get<Character>(`/character/${id}`)
   return data
 }
 
 export async function createCharacter(payload: CharacterPayload): Promise<Character> {
-  const { data } = await client.post<Character>('/character', buildFormData(payload))
+  const { data } = await apiClient.post<Character>('/character', buildFormData(payload))
   return data
 }
 
@@ -38,10 +35,10 @@ export async function updateCharacter(
   id: string,
   payload: CharacterPayload,
 ): Promise<Character> {
-  const { data } = await client.put<Character>(`/character/${id}`, buildFormData(payload))
+  const { data } = await apiClient.put<Character>(`/character/${id}`, buildFormData(payload))
   return data
 }
 
 export async function deleteCharacter(id: string): Promise<void> {
-  await client.delete(`/character/${id}`)
+  await apiClient.delete(`/character/${id}`)
 }

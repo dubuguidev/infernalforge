@@ -7,6 +7,7 @@ export interface Ability {
 export interface Character {
   id: string
   name: string
+  lore: string | null
   class: string
   race: string
   strength: number
@@ -22,6 +23,7 @@ export interface Character {
 
 export interface CharacterPayload {
   name: string
+  lore?: string
   class: string
   race: string
   strength: number

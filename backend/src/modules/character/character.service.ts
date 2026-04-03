@@ -9,10 +9,12 @@ import { UpdateCharacterDto } from './dto/update-character.dto';
 export class CharacterService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateCharacterDto, file?: Express.Multer.File) {
+  async create(userId: string, dto: CreateCharacterDto, file?: Express.Multer.File) {
     return this.prisma.character.create({
       data: {
+        userId,
         name: dto.name,
+        lore: dto.lore,
         class: dto.class,
         race: dto.race,
         strength: dto.strength,
@@ -31,8 +33,11 @@ export class CharacterService {
     });
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     return this.prisma.character.findMany({
+      where: {
+        userId,
+      },
       include: {
         abilities: true,
       },
@@ -42,9 +47,9 @@ export class CharacterService {
     });
   }
 
-  async findOne(id: string) {
-    const character = await this.prisma.character.findUnique({
-      where: { id },
+  async findOne(id: string, userId: string) {
+    const character = await this.prisma.character.findFirst({
+      where: { id, userId },
       include: {
         abilities: true,
       },
@@ -57,8 +62,8 @@ export class CharacterService {
     return character;
   }
 
-  async update(id: string, dto: UpdateCharacterDto, file?: Express.Multer.File) {
-    const existing = await this.findOne(id);
+  async update(id: string, userId: string, dto: UpdateCharacterDto, file?: Express.Multer.File) {
+    const existing = await this.findOne(id, userId);
 
     if (file && existing.imageName) {
       const filePath = join(process.cwd(), 'uploads', 'characters', existing.imageName);
@@ -69,6 +74,7 @@ export class CharacterService {
       where: { id },
       data: {
         name: dto.name,
+        lore: dto.lore,
         class: dto.class,
         race: dto.race,
         strength: dto.strength,
@@ -94,11 +100,11 @@ export class CharacterService {
       });
     }
 
-    return this.findOne(updated.id);
+    return this.findOne(updated.id, userId);
   }
 
-  async remove(id: string) {
-    const existing = await this.findOne(id);
+  async remove(id: string, userId: string) {
+    const existing = await this.findOne(id, userId);
 
     await this.prisma.character.delete({ where: { id } });
 

@@ -29,6 +29,10 @@ const prismaInstance = new PrismaClient({ adapter } as any);
 
 @Injectable()
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
+  get user() {
+    return prismaInstance.user;
+  }
+
   get character() {
     return prismaInstance.character;
   }

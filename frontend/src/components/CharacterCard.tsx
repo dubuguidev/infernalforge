@@ -25,7 +25,7 @@ export default function CharacterCard({ character, onDelete }: Props) {
 
   return (
     <div
-      className="rpg-card-hover group flex flex-col overflow-hidden rounded-lg"
+      className="rpg-card-hover group relative flex flex-col overflow-hidden rounded-lg"
       style={{
         border: '2px solid rgba(100,20,10,0.85)',
         background: 'linear-gradient(175deg, #1c0b0b 0%, #0f0a0a 60%, #0a0808 100%)',
@@ -104,6 +104,18 @@ export default function CharacterCard({ character, onDelete }: Props) {
           </div>
         )}
       </Link>
+
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-3 flex items-end"
+        style={{ background: 'linear-gradient(to top, rgba(10,8,8,0.95) 35%, rgba(10,8,8,0.2) 100%)' }}
+      >
+        <div className="w-full rounded-sm border border-red-950/60 bg-black/55 px-2 py-1.5">
+          <p className="text-[9px] font-cinzel tracking-[0.18em] text-red-400/85 uppercase mb-1">Lore</p>
+          <p className="text-[10px] text-stone-300 leading-relaxed max-h-16 overflow-hidden">
+            {character.lore?.trim() || 'Sem história registrada.'}
+          </p>
+        </div>
+      </div>
 
       {/* ── Bottom action bar ── */}
       <div

@@ -6,6 +6,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
 
 export interface PreviewData {
   name?: string
+  lore?: string
   class?: string
   race?: string
   strength?: number
@@ -32,6 +33,7 @@ interface Props {
 export default function CharacterCardPreview({ data, large = false }: Props) {
   const {
     name = 'Nome do Personagem',
+    lore,
     class: cls = 'Classe',
     race = 'Raça',
     strength = 0,
@@ -104,6 +106,10 @@ export default function CharacterCardPreview({ data, large = false }: Props) {
           <span className="text-stone-600 text-xs">•</span>
           <span className="text-sm text-stone-400 font-crimson">{race}</span>
         </div>
+
+        {lore && (
+          <p className="text-sm text-stone-400 leading-relaxed mb-4 max-h-16 overflow-hidden">{lore}</p>
+        )}
 
         {/* Divider */}
         <div className="rpg-ornament text-[10px] font-cinzel tracking-widest mb-4">

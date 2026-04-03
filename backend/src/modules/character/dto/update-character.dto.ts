@@ -49,6 +49,10 @@ export class UpdateCharacterDto {
 
   @IsOptional()
   @IsString()
+  lore?: string;
+
+  @IsOptional()
+  @IsString()
   class?: string;
 
   @IsOptional()

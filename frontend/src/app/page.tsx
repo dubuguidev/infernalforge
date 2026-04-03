@@ -1,18 +1,38 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Flame, Plus, Swords } from 'lucide-react'
 import CharacterCard from '@/components/CharacterCard'
 import ConfirmDialog from '@/components/ConfirmDialog'
 import Spinner from '@/components/Spinner'
 import { useCharacters, useDeleteCharacter } from '@/hooks/useCharacters'
+import { useAuth } from '@/hooks/useAuth'
 import toast from 'react-hot-toast'
 
 export default function HomePage() {
+  const router = useRouter()
+  const { isReady, isAuthenticated } = useAuth()
   const { data: characters, isLoading, isError } = useCharacters()
   const deleteMutation = useDeleteCharacter()
   const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null)
+
+  useEffect(() => {
+    if (isReady && !isAuthenticated) {
+      router.replace('/login')
+    }
+  }, [isReady, isAuthenticated, router])
+
+  if (!isReady) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 gap-4">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) return null
 
   const handleDelete = async () => {
     if (!pendingDelete) return
