@@ -1,0 +1,6 @@
+{
+  "/characters/[id]/edit/page": "app/characters/[id]/edit/page.js",
+  "/characters/[id]/page": "app/characters/[id]/page.js",
+  "/characters/new/page": "app/characters/new/page.js",
+  "/page": "app/page.js"
+}

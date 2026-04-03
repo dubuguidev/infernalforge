@@ -1,0 +1,238 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-infernal-black text-stone-200 antialiased;
+    font-family: var(--font-crimson), Georgia, serif;
+    background-image:
+      radial-gradient(ellipse at 15% 0%, rgba(127, 29, 29, 0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 100%, rgba(127, 29, 29, 0.08) 0%, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #0a0a0a; }
+  ::-webkit-scrollbar-thumb {
+    background: #7f1d1d;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
+
+  /* Range input */
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply w-full h-1.5 rounded-full bg-stone-800 cursor-pointer;
+  }
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    @apply w-4 h-4 rounded-full cursor-pointer;
+    background: #dc2626;
+    border: 2px solid #0a0a0a;
+    box-shadow: 0 0 8px rgba(220, 38, 38, 0.6);
+  }
+  input[type='range']::-moz-range-thumb {
+    @apply w-4 h-4 rounded-full cursor-pointer;
+    background: #dc2626;
+    border: 2px solid #0a0a0a;
+  }
+}
+
+@layer components {
+  /* Cards */
+  .rpg-card {
+    @apply bg-infernal-void border border-red-950/60 rounded-xl;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .rpg-card-hover {
+    @apply rpg-card transition-all duration-300 cursor-pointer;
+  }
+  .rpg-card-hover:hover {
+    border-color: rgba(220, 38, 38, 0.35);
+    transform: translateY(-4px);
+    box-shadow:
+      0 12px 48px rgba(0, 0, 0, 0.9),
+      0 0 0 1px rgba(220, 38, 38, 0.2),
+      0 0 30px rgba(220, 38, 38, 0.08);
+  }
+
+  /* Buttons */
+  .rpg-btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg
+           font-cinzel text-sm font-semibold tracking-wider transition-all duration-200
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600/60
+           disabled:opacity-50 disabled:cursor-not-allowed select-none;
+  }
+
+  .rpg-btn-primary {
+    @apply rpg-btn text-red-100 border border-red-800/70;
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+    box-shadow: 0 2px 16px rgba(127, 29, 29, 0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .rpg-btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%);
+    border-color: rgba(220, 38, 38, 0.6);
+    box-shadow: 0 4px 24px rgba(220, 38, 38, 0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .rpg-btn-primary:active:not(:disabled) {
+    background: linear-gradient(135deg, #7f1d1d 0%, #7f1d1d 100%);
+    transform: translateY(1px);
+  }
+
+  .rpg-btn-secondary {
+    @apply rpg-btn text-stone-300 border border-stone-800 bg-stone-900/80;
+  }
+  .rpg-btn-secondary:hover:not(:disabled) {
+    @apply text-stone-100 border-stone-700 bg-stone-800;
+  }
+
+  .rpg-btn-danger {
+    @apply rpg-btn text-red-400 border border-red-950 bg-red-950/40;
+  }
+  .rpg-btn-danger:hover:not(:disabled) {
+    @apply text-red-300 border-red-800 bg-red-950/70;
+    box-shadow: 0 0 16px rgba(220, 38, 38, 0.2);
+  }
+
+  .rpg-btn-ghost {
+    @apply rpg-btn text-stone-400 bg-transparent border border-transparent;
+  }
+  .rpg-btn-ghost:hover:not(:disabled) {
+    @apply text-stone-200 border-stone-800 bg-stone-900/50;
+  }
+
+  /* Inputs */
+  .rpg-input {
+    @apply w-full bg-stone-900/70 border border-stone-800 rounded-lg px-3.5 py-2.5
+           text-stone-200 placeholder-stone-600 text-base
+           focus:outline-none focus:border-red-800/80 focus:ring-1 focus:ring-red-800/40
+           transition-colors duration-150;
+    font-family: var(--font-crimson), Georgia, serif;
+  }
+  .rpg-input:hover:not(:focus) {
+    @apply border-stone-700;
+  }
+
+  .rpg-label {
+    @apply block text-[10px] font-cinzel font-semibold tracking-[0.2em] text-stone-500 mb-1.5 uppercase;
+  }
+
+  .rpg-input-error {
+    @apply border-red-700/70 focus:border-red-600 focus:ring-red-600/30;
+  }
+
+  /* Dividers */
+  .rpg-divider {
+    @apply border-t border-stone-900 my-6;
+  }
+
+  /* Stat track */
+  .stat-track {
+    @apply h-2 bg-stone-900 rounded-full overflow-hidden border border-stone-800/50;
+  }
+
+  /* Section title */
+  .rpg-section-title {
+    @apply font-cinzel font-bold text-xs tracking-[0.25em] uppercase text-stone-500 mb-4;
+  }
+}
+
+@layer utilities {
+  .text-infernal {
+    color: #dc2626;
+    text-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+  }
+
+  .text-ember {
+    color: #f97316;
+    text-shadow: 0 0 20px rgba(249, 115, 22, 0.35);
+  }
+
+  .font-cinzel {
+    font-family: var(--font-cinzel), Georgia, serif !important;
+  }
+
+  .glow-red {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.35), 0 0 60px rgba(220, 38, 38, 0.1);
+  }
+
+  .glow-ember {
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.35);
+  }
+}
+
+/* Animations */
+.modal-backdrop {
+  animation: backdropIn 0.18s ease-out;
+}
+.modal-panel {
+  animation: panelIn 0.25s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Flame flicker effect on decorative elements */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45%       { opacity: 0.85; }
+  50%       { opacity: 0.95; }
+  55%       { opacity: 0.8; }
+}
+
+.flame {
+  animation: flicker 1.8s ease-in-out infinite;
+}
+
+/* Stat fill on mount */
+.stat-fill {
+  transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Decorative separators */
+.rpg-ornament {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #44403c;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+}
+.rpg-ornament::before,
+.rpg-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #3f0a0a, transparent);
+}
+
+/* Page entry animation */
+.page-enter {
+  animation: pageEnter 0.35s ease-out;
+}
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
